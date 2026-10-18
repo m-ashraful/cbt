@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="bn"><head>
+<script>var API_URL='https://script.google.com/macros/s/AKfycbwUjME1SQLHscvsfBqUnYNoPbqOjFM2CtCuLPfVxlzc2VYZ_OnwFW3yn4ap5TIrXGZa/exec';</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CBT — আমার হিসাব</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-portal.png">
+<link rel="apple-touch-icon" href="icon-portal.png">
+<meta name="theme-color" content="#4f46e5"><meta charset="utf-8"><base target="_top">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--page:#f3f4fa;--card:#fff;--ink:#111827;--ink2:#4b5563;--mut:#8b93a7;--line:#e5e7f0;
+--b1:#4f46e5;--b2:#7c3aed;--good:#15803d;--goodbg:#e8f7ee;--bad:#b91c1c;--badbg:#fdecec;--warn:#b45309;--warnbg:#fff6e0;--fb:#1877f2;--yt:#ef4444}
+@media (prefers-color-scheme:dark){:root{--page:#0b0d14;--card:#151a26;--ink:#f1f3f9;--ink2:#b4bccd;--mut:#7c869b;--line:#262c3d;
+--goodbg:rgba(22,163,74,.16);--good:#4ade80;--badbg:rgba(220,38,38,.16);--bad:#f87171;--warnbg:rgba(245,158,11,.14);--warn:#fbbf24}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Times New Roman",Times,"Hind Siliguri",serif;background:var(--page);color:var(--ink);line-height:1.5;padding:16px}
+.wrap{max-width:480px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--b1),var(--b2));color:#fff;
+display:grid;place-items:center;font-weight:700;font-size:13px}
+.brand b{display:block;font-size:17px;line-height:1.2}.brand span{font-size:12.5px;color:var(--mut)}
+.blogo{width:44px;height:44px;object-fit:contain;flex:none}
+/* লগইন — অ্যাপ লক স্ক্রিনের মতো: গাঢ় পটভূমি, মাঝে সাদা কার্ড */
+.gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;
+background:radial-gradient(circle at 20% 15%,#4b3fd6 0,transparent 45%),radial-gradient(circle at 85% 90%,#b8336a 0,transparent 40%),#14122b}
+.gcard{width:100%;max-width:360px;margin:auto;background:#fff;color:#1a1a2e;border-radius:22px;padding:26px 22px 20px;
+box-shadow:0 24px 60px rgba(0,0,0,.45);text-align:center}
+.glogo{display:block;max-width:180px;max-height:96px;margin:0 auto 12px;object-fit:contain}
+.gico{width:64px;height:64px;margin:0 auto 12px;border-radius:18px;place-items:center;font-weight:700;font-size:18px;color:#fff;
+background:linear-gradient(135deg,#6c5ce7,#a55eea);box-shadow:0 8px 22px rgba(108,92,231,.4)}
+.gorg{font-size:20px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.gapp{font-size:12.5px;font-weight:600;color:#8a86a8;letter-spacing:.3px;margin-bottom:18px}
+.gcard label{text-align:left;font-size:12.5px;font-weight:700;color:#444;margin:0 0 5px}
+.gcard input{height:auto;padding:12px 14px;margin-bottom:10px;border:2px solid #e1e5f0;border-radius:12px;background:#fff;color:#1a1a2e;
+font-size:18px;font-weight:600}
+.gcard input:focus{outline:none;border-color:#6c5ce7;box-shadow:0 0 0 3px rgba(108,92,231,.15)}
+.gcard button{height:auto;padding:13px;margin-top:6px;font-size:15px;font-weight:700;background:linear-gradient(135deg,#6c5ce7,#4a3fc4);
+box-shadow:0 6px 18px rgba(108,92,231,.35)}
+.gcard .err{background:#fdecec;color:#b91c1c}
+.gfoot{margin-top:14px;font-size:11.5px;font-weight:600;color:#9a97b5;line-height:1.5}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--ink2);margin:10px 0 4px;font-weight:500}
+input,select{width:100%;height:46px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font:inherit;font-size:16px;
+background:var(--page);color:var(--ink)}
+button{width:100%;height:48px;border:0;border-radius:12px;margin-top:14px;font:inherit;font-weight:600;font-size:16px;color:#fff;
+background:linear-gradient(135deg,var(--b1),var(--b2));cursor:pointer}
+button:disabled{opacity:.6}
+.err{background:var(--badbg);color:var(--bad);border-radius:10px;padding:9px 12px;font-size:13.5px;margin-top:10px}
+.hero{background:linear-gradient(135deg,var(--b1),var(--b2));color:#fff;border-radius:18px;padding:18px;margin-bottom:12px}
+.hero .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.hero h1{font-size:18px;line-height:1.25}.hero small{opacity:.8;font-size:12.5px}
+.hero .big{font-size:38px;font-weight:700;margin:8px 0 2px;line-height:1.1}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:99px;background:rgba(255,255,255,.18)}
+.out{background:none;border:1px solid rgba(255,255,255,.4);width:auto;height:32px;margin:0;padding:0 12px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+.k b{display:block;font-size:20px}.k span{font-size:11.5px;color:var(--mut)}
+.k.bad b{color:var(--bad)}.k.good b{color:var(--good)}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border:0}.row .d{width:52px;color:var(--mut);font-size:12.5px}.row .m{flex:1;display:flex;gap:5px;flex-wrap:wrap}
+.row .a{font-weight:700}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-top:5px}
+.b{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:99px}
+.b.g{background:var(--goodbg);color:var(--good)}.b.r{background:var(--badbg);color:var(--bad)}.b.w{background:var(--warnbg);color:var(--warn)}
+.note{text-align:center;color:var(--mut);font-size:12px;margin-top:14px}
+h2{font-size:15px;margin-bottom:6px}
+</style></head><body><div class="wrap" id="app"></div>
+<script>
+var BOOT={"id":"","verify":true,"org":"Technique Easy Education","logo":"logo.png","remote":true};
+var $=function(s){return document.querySelector(s)};
+// সার্ভারে কল — GitHub-এ fetch (API_URL), Apps Script লিংকে google.script.run
+function srv(fn,args){
+  if(window.API_URL)return fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args})})
+    .then(function(r){if(!r.ok)throw new Error("সার্ভার সাড়া দিচ্ছে না — একটু পরে আবার চেষ্টা করুন।");return r.json()},function(){throw new Error("সার্ভারে পৌঁছানো যায়নি — ইন্টারনেট দেখুন।")})
+    .then(function(j){if(!j||!j.ok)throw new Error((j&&j.error)||"অজানা সমস্যা।");return j.data});
+  return new Promise(function(res,rej){var r=google.script.run.withSuccessHandler(res).withFailureHandler(rej);r[fn].apply(r,args)});
+}
+var S={id:"",key:"",month:""};
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function tk(n){return "৳"+Math.round(+n||0).toLocaleString("en-IN")}
+var BN=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+function ml(k){return BN[+k.slice(5,7)-1]+" "+k.slice(0,4)}
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){return null}}
+var APP="Content Boosting Team (CBT) · আমার হিসাব";
+// logo — না এলে পাশের "CBT" বক্স দেখায়
+function logoImg(cls,box){return (BOOT.logo?'<img class="'+cls+'" src="'+esc(BOOT.logo)+'" alt="logo" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'grid\'">':'')+
+  '<div class="'+box+'" style="display:'+(BOOT.logo?'none':'grid')+'">CBT</div>'}
+function brand(){return '<div class="brand">'+logoImg("blogo","logo")+'<div><b>'+esc(BOOT.org)+'</b><span>'+APP+'</span></div></div>'}
+function login(msg){
+  $("#app").innerHTML='<div class="gate"><div class="gcard">'+logoImg("glogo","gico")+
+  '<div class="gorg">'+esc(BOOT.org)+'</div><div class="gapp">'+APP+'</div>'+
+  '<label>Member ID</label><input id="mid" placeholder="যেমন M001" autocomplete="username" value="'+esc(S.id||BOOT.id)+'">'+
+  (BOOT.verify?'<label>WhatsApp নম্বরের শেষ ৪ সংখ্যা</label><input id="mkey" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="current-password">':'')+
+  '<button id="go">দেখুন</button>'+(msg?'<div class="err">'+esc(msg)+'</div>':'')+'<div class="gfoot">সমস্যা হলে টিম লিডকে জানান (<a href="tel:01303292400" style="color:inherit;text-decoration:none">01303292400</a>)</div></div></div>';
+  $("#go").onclick=go;
+  [$("#mid"),$("#mkey")].forEach(function(el){if(el)el.addEventListener("keydown",function(e){if(e.key==="Enter")go()})});
+}
+function go(){
+  S.id=$("#mid").value.trim();S.key=BOOT.verify?$("#mkey").value.trim():"";
+  if(!S.id)return login("Member ID দিন");
+  if(BOOT.verify&&S.key.length!==4)return login("নম্বরের শেষ ৪ সংখ্যা দিন");
+  load("");
+}
+function load(month){
+  var b=$("#go");if(b){b.disabled=true;b.textContent="আনা হচ্ছে…"}
+  srv("portalData",[S.id,S.key,month]).then(function(d){
+    S.month=d.month;store("cbt_portal",JSON.stringify({id:S.id,key:S.key}));store("cbt_portal_last",JSON.stringify(d));show(d);
+  },function(e){store("cbt_portal",null);store("cbt_portal_last",null);login(e&&e.message?e.message:String(e))});
+}
+var ST={ok:["g","✓ OK"],dup:["r","Duplicate"],over:["w","Limit পার"],bad:["r","ভুল লিংক"],unknown:["r","অজানা"],other:["w","?"]};
+function show(d){
+  var opts=d.months.map(function(m){return '<option value="'+m+'"'+(m===d.month?' selected':'')+'>'+ml(m)+'</option>'}).join("");
+  var issues=[[d.noSC,"📸 Screenshot নেই"],[d.low,"📉 Low"],[d.dup,"♻️ Duplicate"],[d.bad,"🔗 ভুল লিংক"],[d.over,"🚦 Limit পার"],[d.warns,"⚠️ Warning"]]
+    .filter(function(x){return x[0]}).map(function(x){return '<div class="k bad"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'}).join("");
+  var list=d.recent.length?d.recent.map(function(r){var st=ST[r.status]||ST.other;
+    return '<div class="row"><span class="d">'+esc(r.date)+'</span><i class="dot" style="background:var(--'+r.plat+')"></i><span class="m"><span class="b '+st[0]+'">'+st[1]+'</span>'+
+    (r.sc?'':'<span class="b r">📸 নেই</span>')+(r.low?'<span class="b w">Low</span>':'')+'</span><span class="a">'+tk(r.sal)+'</span></div>'}).join("")
+    :'<div class="note" style="margin:6px 0">এই মাসে কোনো submission নেই</div>';
+  $("#app").innerHTML=brand()+
+    '<div class="hero"><div class="top"><div><h1>'+esc(d.name)+'</h1><small>'+esc(d.id)+'</small></div><button class="out" id="out">বের হন</button></div>'+
+    '<div class="big">'+tk(d.salary)+'</div><span class="pill">'+(d.paid?'✅ পেমেন্ট হয়েছে':'⏳ '+ml(d.month)+' — এখনো দেওয়া হয়নি')+'</span>'+
+    '<div style="font-size:12.5px;opacity:.9;margin-top:8px">'+(d.pay.mode==="days"
+      ?'📅 কাজের দিন ভিত্তিক: '+Math.min(d.days,d.pay.cap)+' দিন × ৳'+d.pay.rate+' (মাসে সর্বোচ্চ '+d.pay.cap+' দিন)'
+      :'📨 Submission ভিত্তিক বেতন')+'</div></div>'+
+    '<div class="card" style="padding:10px 12px"><select id="mon">'+opts+'</select></div>'+
+    '<div class="grid"><div class="k"><b>'+d.sub+'</b><span>মোট জমা</span></div><div class="k good"><b>'+d.ok+'</b><span>✅ গ্রহণযোগ্য</span></div>'+
+    '<div class="k"><b>'+d.days+'</b><span>কাজের দিন</span></div>'+issues+'</div>'+
+    (d.month===d.today.slice(0,7)?'<div class="card" style="text-align:center;font-weight:600">'+(d.todayCount?'✅ আজ '+d.todayCount+' টি জমা দিয়েছেন':'⏰ আজ এখনো জমা দেননি')+'</div>':'')+
+    '<div class="card"><h2>🕒 '+ml(d.month)+' এর জমা</h2>'+list+'</div><p class="note">হিসাব সাথে সাথে আপডেট হয় · ভুল মনে হলে টিম লিডকে জানান</p>';
+  $("#mon").onchange=function(e){load(e.target.value)};
+  $("#out").onclick=function(){store("cbt_portal",null);store("cbt_portal_last",null);S.key="";login("")};
+}
+function start(){var s=null,last=null;try{s=JSON.parse(store("cbt_portal")||"null");last=JSON.parse(store("cbt_portal_last")||"null")}catch(e){}
+  if(s&&s.id&&(!BOOT.id||BOOT.id===s.id)){S.id=s.id;S.key=s.key||"";
+    // শেষবারের হিসাব সাথে সাথে দেখায়, নতুনটা এলে বদলে যায়
+    if(last&&last.id===s.id)show(last);else $("#app").innerHTML=brand()+'<div class="card">আনা হচ্ছে…</div>';load("")}else login("")}
+// GitHub সাইটে: ?id=M001 লিংক থেকে ID, আর নাম/logo/নম্বর-যাচাই সার্ভার থেকে
+if(BOOT.remote){var q=/[?&]id=([^&]+)/.exec(location.search);if(q)BOOT.id=decodeURIComponent(q[1]).trim();
+  var cb=null;try{cb=JSON.parse(store("cbt_portal_boot")||"null")}catch(e){}
+  if(cb){BOOT.verify=cb.verify;BOOT.org=cb.org;BOOT.logo=cb.logo;start()}else $("#app").innerHTML='<div class="card" style="margin-top:40px;text-align:center">লোড হচ্ছে…</div>';
+  srv("portalBoot",[]).then(function(b){var first=!cb;BOOT.verify=b.verify;BOOT.org=b.org;BOOT.logo=b.logo;store("cbt_portal_boot",JSON.stringify(b));if(first)start()},
+    function(e){if(!cb)$("#app").innerHTML='<div class="card err" style="margin-top:40px">'+esc(e.message||e)+'</div>'})}
+else start();
+</script></body></html>
