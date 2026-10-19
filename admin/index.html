@@ -20,6 +20,7 @@ function callServer(fn,args){
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="../icon-admin.png">
 <link rel="apple-touch-icon" href="../icon-admin.png">
+<script src="ntf.js"></script>
 <base target="_top">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -121,6 +122,7 @@ svg{flex:none}
 .pg h1{font-size:15.5px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pg p{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pg p .d{display:none}
+html:not(.ntf-on) [data-ntf-bell]{display:none!important}  /* 🔔 শুধু GitHub সাইটে (ntf.js) */
 .ib{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);display:grid;place-items:center;flex:none;
     transition:color .15s,border-color .15s}
 .ib:hover{color:var(--brand-ink);border-color:var(--brand)}
@@ -943,6 +945,9 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size
         <div class="pg-t"><h1 id="pgT">Technique Easy Education</h1><p><span class="d" id="pgS"></span><span class="m">Technique Easy Education · CBT Admin</span></p></div></div>
       <button class="qs" data-act="qs" title="খুঁজুন (Ctrl+K)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>মেম্বার বা পাতা খুঁজুন…<kbd>Ctrl K</kbd></button>
       <button id="qsBtn" class="ib" data-act="qs" title="খুঁজুন" aria-label="খুঁজুন"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+      <button class="ib" data-ntf-bell aria-label="নোটিফিকেশন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      </button>
       <button id="refreshBtn" class="ib" title="Refresh" aria-label="Refresh">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
       </button>
@@ -1182,6 +1187,7 @@ var LOGIN = { step: "email", email: store.get("cbt_email") || "" };
 function showLogin(msg) {
   // GitHub সাইটে PIN লক লগইন পাতার উপর বসে না — লগইনের পর আসে
   if (window.appLockWaitLogin) window.appLockWaitLogin();
+  if (window.NTF) NTF.stop();
   $("#app").hidden = true; $("#login").hidden = false;
   $("#stepEmail").hidden = LOGIN.step !== "email"; $("#stepCode").hidden = LOGIN.step !== "code";
   $("#loginSub").textContent = LOGIN.step === "code" ? LOGIN.email + " — এ ৬ সংখ্যার কোড গেছে" : "অনুমতি পাওয়া ইমেইল দিন — ৬ সংখ্যার কোড যাবে";
@@ -1251,6 +1257,7 @@ function boot() {
   api("apiBoot").then(function (b) {
     cachePut("boot", b);
     setUser(b);
+    if (window.NTF) NTF.start();
     if (cached) paintNav(); else switchTab(S.tab, true);
   }).catch(function (e) {
     if (/AUTH_REQUIRED/.test(e.message) || cached) return;
@@ -2857,6 +2864,7 @@ $("#logoutBtn").onclick = function () {
   $("#loOut").onclick = function () {
     closeModal();
     // টোকেন এখনই কলে চলে যায় (api ডাকার মুহূর্তে), তারপর এই ব্রাউজার থেকে মোছা
+    if (window.NTF) NTF.logout();   // এই ডিভাইসের Push বন্ধ (কল এখনই রওনা দেয়)
     if (AUTH) api("apiLogout").catch(function () {});
     setAuth(""); S.boot = null;
     cacheClear();   // শেষবারের হিসাবও মুছে যায় — পরের জন দেখবে না
@@ -2871,6 +2879,12 @@ setInterval(function () {
   var now = d.period === "month" ? d.data.today.slice(0, 7) : d.data.today;
   if (d.key === now) loadDash(true);
 }, 5 * 60 * 1000);
+
+// ── 🔔 নোটিফিকেশন — GitHub সাইটে ntf.js থাকে (window.NTF); Apps Script-এর পাতায় ঘণ্টা দেখায় না ──
+if (window.NTF) NTF.init({
+  app: "cbt", name: "CBT Admin", ext: "Gmail", sw: "ntf-sw.js", scope: "./",
+  call: function (op, arg) { return api("apiNotify", op, arg); }
+});
 
 // ── শুরু ──
 (function start() {
