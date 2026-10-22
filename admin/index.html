@@ -977,6 +977,16 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size
 //  HELPERS
 // ══════════════════════════════════════════════════════════════════
 var $ = function (s, r) { return (r || document).querySelector(s); };
+// একই HTML হলে DOM আবার বানাই না — আগের হিসাব দেখানোর পর নতুনটা এলে (বা ৫ মিনিটের refresh-এ) পুরো পাতা নতুন করে
+// আঁকা হতো; ঠিক তখন চাপা বোতাম হারিয়ে যেত। after = আঁকার পরের কাজ (chart, ইভেন্ট) — শুধু সত্যিই আঁকা হলে চলে।
+function paint(el, html, after) {
+  if (!el) return false;
+  if (el.__h === html && el.innerHTML === el.__s) return false;
+  el.innerHTML = html; el.__h = html;
+  if (after) after();
+  el.__s = el.innerHTML;
+  return true;
+}
 var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 function V() { return $("#view"); }
 
@@ -1270,9 +1280,9 @@ function paintNav() {
     return '<button data-act="tab" data-t="' + t.k + '" class="' + (S.tab === t.k ? "on" : "") + '" style="--tc:' + t.c + ';--tb:' + t.b + '">' +
       '<span class="bi">' + svg(t.k) + '</span>' + t.t + '</button>';
   }).join("");
-  $("#bnav").innerHTML = b;
+  paint($("#bnav"), b);
   // সাইডবার: ভাগ অনুযায়ী মেনু; "সেটিংস ও টুলস" খোলা থাকলে নিচে তার অংশগুলো
-  $("#sideNav").innerHTML = NAV_GROUPS.map(function (g) {
+  paint($("#sideNav"), NAV_GROUPS.map(function (g) {
     return '<div class="sb-lbl">' + g[0] + '</div>' + g[1].map(function (k) {
       var t = tabOf(k), on = S.tab === k, n = NAVB[k];
       var h = '<button class="sb-it' + (on ? ' on' : '') + '" data-act="tab" data-t="' + k + '" style="--tc:' + t.c + ';--tb:' + t.b + '">' +
@@ -1284,7 +1294,7 @@ function paintNav() {
       }).join("") + '</div>';
       return h;
     }).join("");
-  }).join("");
+  }).join(""));
   paintHead();
 }
 // উপরের শিরোনাম — কোন পাতায় আছেন
@@ -1372,12 +1382,12 @@ function syncDash() {
 function renderDash(d) {
   var isM = d.period === "month";
   var isNow = isM ? d.key === d.today.slice(0, 7) : d.key === d.today;
-  $("#dash").innerHTML = hero(d, isM, isNow) + kpis(d, isM) + '<div class="cols">' +
+  paint($("#dash"), hero(d, isM, isNow) + kpis(d, isM) + '<div class="cols">' +
     trendCard(d, isM) + issuesCard(d) + platformCard(d) +
     missingCard(d, isM, isNow) + topCard(d) + membersCard(d, isM) +
     warnCard(d) + (isM ? payCard(d) : recentCard(d)) + errorsCard(d) +
-    '</div>' + footer(d);
-  drawTrend(); renderMembers(); bindMembers();
+    '</div>' + footer(d),
+    function () { drawTrend(); renderMembers(); bindMembers(); });
 }
 function hero(d, isM, isNow) {
   var c = d.cur, p = d.prev;
@@ -1693,7 +1703,7 @@ function renderSubs() {
       '<span class="tags">' + subTags(r) + '</span></span>' +
       '<span class="it-amt">' + tk(r.sal) + '</span></button>';
   });
-  el.innerHTML = h;
+  paint(el, h);
 }
 function subOpen(i) {
   var r = S.subs.data.items[i]; if (!r) return;
@@ -1799,13 +1809,13 @@ function renderMem() {
     '<span class="badge b-brand">আজ জমা: ' + act.filter(function (m) { return m.today; }).length + ' / ' + act.length + '</span>' +
     '<span class="badge b-warn">এই মাসে ' + tk(act.reduce(function (s, m) { return s + m.mSal; }, 0)) + '</span>' +
     (d.items.length - act.length ? '<span class="badge b-plain">' + (d.items.length - act.length) + ' জন inactive</span>' : '');
-  el.innerHTML = list.length ? list.map(function (m) {
+  paint(el, list.length ? list.map(function (m) {
     return '<button class="item' + (m.active ? '' : ' dim') + '" data-act="memOpen" data-id="' + esc(m.id) + '">' + avatar(m.id, m.name) +
       '<span class="it-main"><b class="ell">' + esc(m.name) + '</b><small>' + esc(m.id) + (m.whatsapp ? ' · ' + esc(m.whatsapp) : ' · ⚠️ নম্বর নেই') + '</small>' +
       '<span class="tags">' + (m.active ? (m.today ? '<span class="badge b-good">✓ আজ ' + m.today + '</span>' : '<span class="badge b-plain">আজ নেই</span>') : '<span class="badge b-plain">Inactive</span>') +
       (m.warn ? '<span class="badge b-crit">⚠️ ' + m.warn + '</span>' : '') + '</span></span>' +
       '<span class="it-amt">' + tk(m.mSal) + '<small>এই মাসে ' + m.mSub + ' টি</small></span></button>';
-  }).join("") : emptyBox("👤", "কেউ নেই");
+  }).join("") : emptyBox("👤", "কেউ নেই"));
 }
 function findMem(id) { return S.mem.data ? S.mem.data.items.filter(function (m) { return m.id === id; })[0] : null; }
 function memOpen(id) {
@@ -1886,7 +1896,7 @@ function renderPay() {
   d.rows.forEach(function (r) { tot += r.total; if (r.paid) { paid += r.total; pn++; } });
   var q = S.pay.q.toLowerCase(), pm = d.pay, isDays = pm && pm.mode === "days";
   var rows = d.rows.filter(function (r) { return !q || (r.name + " " + r.id).toLowerCase().indexOf(q) !== -1; });
-  el.innerHTML = modeCard(pm) + '<div class="payhero"><div class="ph total"><b>' + tk(tot) + '</b><span>' + monthLabel(d.month) + ' · ' + d.rows.length + ' জন</span></div>' +
+  paint(el, modeCard(pm) + '<div class="payhero"><div class="ph total"><b>' + tk(tot) + '</b><span>' + monthLabel(d.month) + ' · ' + d.rows.length + ' জন</span></div>' +
     '<div class="ph paid"><b>' + tk(paid) + '</b><span>✅ দেওয়া · ' + pn + ' জন</span></div>' +
     '<div class="ph due"><b>' + tk(tot - paid) + '</b><span>⏳ বাকি · ' + (d.rows.length - pn) + ' জন</span></div></div>' +
     (tot ? '<div class="meter" style="height:8px;margin:-2px 0 12px"><i style="width:' + pct(paid, tot) + '%"></i></div>' : '') +
@@ -1905,7 +1915,7 @@ function renderPay() {
         '<div class="pr-amt"><b>' + tk(r.total) + '</b>' + (r.paid && r.paidOn ? '<small>✓ ' + esc(r.paidOn) + '</small>' : '') + '</div>' +
         '<div class="pr-acts"><button class="icb" data-act="paySlip" data-id="' + esc(r.id) + '" title="Payslip PDF">' + svg("file") + '</button>' +
         (r.phone ? '<button class="icb wa" data-act="payWa" data-id="' + esc(r.id) + '" title="WhatsApp এ জানান">' + svg("wa") + '</button>' : '') + '</div></div>';
-    }).join("") : emptyBox("💵", "এই মাসে কোনো বেতন নেই")) + '</div>';
+    }).join("") : emptyBox("💵", "এই মাসে কোনো বেতন নেই")) + '</div>');
 }
 // ── বেতনের ধরন: submission ভিত্তিক ⇄ কাজের দিন ভিত্তিক (মাস অনুযায়ী) ──
 function modeCard(pm) {
