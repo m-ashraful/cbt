@@ -1097,7 +1097,8 @@ var S = {
   mem:  { data: null, q: "", f: "active" },
   pay:  { month: "", data: null, q: "" },
   warn: { month: "", level: "", member: "", data: null },
-  more: { data: null, events: null, evErr: false, sec: "rules" }
+  more: { data: null, events: null, evErr: false, sec: "rules" },
+  moreOpen: true   // সাইডবারে "সেটিংস ও টুলস"-এর ভেতরের তালিকা খোলা কি না
 };
 function markDirty() { TABS.forEach(function (t) { S.dirty[t.k] = true; }); }
 
@@ -1295,8 +1296,8 @@ function paintNav() {
       var h = '<button class="sb-it' + (on ? ' on' : '') + '" data-act="tab" data-t="' + k + '" style="--tc:' + t.c + ';--tb:' + t.b + '">' +
         '<span class="si">' + svg(k) + '</span>' + (t.st || t.t) +
         (n ? '<span class="cnt" title="' + esc(NAVB_T[k] || "") + '">' + n + '</span>' : '') +
-        (k === "more" ? '<span class="chev">' + svg(on ? "down" : "right", 2.4) + '</span>' : '') + '</button>';
-      if (k === "more" && on) h += '<div class="sb-sub">' + MORE_SECS.map(function (s) {
+        (k === "more" ? '<span class="chev">' + svg(on && S.moreOpen ? "down" : "right", 2.4) + '</span>' : '') + '</button>';
+      if (k === "more" && on && S.moreOpen) h += '<div class="sb-sub">' + MORE_SECS.map(function (s) {
         return '<button data-act="moreSec" data-s="' + s.k + '" class="' + (S.more.sec === s.k ? "on" : "") + '">' + s.ic + ' ' + s.t + '</button>';
       }).join("") + '</div>';
       return h;
@@ -2609,7 +2610,13 @@ function copyText(v) {
 // ══════════════════════════════════════════════════════════════════
 var ACT = {
   reboot: function () { boot(); },
-  tab: function (el) { switchTab(el.getAttribute("data-t")); },
+  tab: function (el) {
+    var t = el.getAttribute("data-t");
+    // সাইডবারে "সেটিংস ও টুলস" খোলা অবস্থায় আবার চাপলে (বা তীরে) ভেতরের তালিকা লুকায়/দেখায় — পাতা একই থাকে
+    if (t === "more" && S.tab === "more" && el.classList.contains("sb-it")) { S.moreOpen = !S.moreOpen; paintNav(); return; }
+    if (t === "more") S.moreOpen = true;   // অন্য পাতা থেকে এলে খোলা অবস্থায়
+    switchTab(t);
+  },
   moreSec: function (el) {
     S.more.sec = el.getAttribute("data-s"); store.set("cbt_more", S.more.sec);
     if (S.tab !== "more") switchTab("more");
