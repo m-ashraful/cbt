@@ -1406,7 +1406,7 @@ function hero(d, isM, isNow) {
   var dlHtml = dl === null ? (c.sal ? '<b>▲ নতুন</b>' : '<b>—</b>')
              : dl > 0 ? '<b>▲ ' + dl + '%</b>' : dl < 0 ? '<b>▼ ' + Math.abs(dl) + '%</b>' : '<b>— একই</b>';
   var avg = isM && d.elapsed ? c.sal / d.elapsed : 0;
-  var pm = d.pay, mode = pm && pm.mode === "days"
+  var pm = d.payMode, mode = pm && pm.mode === "days"
     ? '📅 কাজের দিন ভিত্তিক · ' + tk(pm.rate) + '/দিন, সর্বোচ্চ ' + pm.cap + ' দিন' : '📨 Submission ভিত্তিক বেতন';
   return '<section class="hero">' +
     '<div><div class="lbl">' + esc(lbl) + '</div><div class="big">' + tk(c.sal) + '</div>' +
