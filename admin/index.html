@@ -171,7 +171,13 @@ html:not(.ntf-on) [data-ntf-bell]{display:none!important}  /* 🔔 শুধু 
 .sb-user .u{min-width:0}
 .sb-user b{display:block;font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-user span{display:block;font-size:11px;font-weight:700;color:var(--brand-ink)}
-.sb-ver{text-align:center;font-size:10.5px;color:var(--muted);margin-top:10px}
+.sb-ver{text-align:center;font-size:10.5px;color:var(--muted);margin-top:10px;line-height:1.55}
+.sb-ver b{color:var(--ink);font-weight:700}
+/* ডেভেলপারের নাম — ফোনে পাতার একদম নিচে (নিচের ট্যাব-বারের উপরে); কম্পিউটারে সাইডবারের নিচে (sb-ver) */
+.dev-foot{text-align:center;font-size:11.5px;color:var(--muted);padding:2px 12px calc(96px + env(safe-area-inset-bottom))}
+.dev-foot b{color:var(--ink);font-weight:700}
+#view.wrap{padding-bottom:14px}
+@media (min-width:960px){ .dev-foot{display:none} #view.wrap{padding-bottom:104px} }
 
 /* "আরও" পাতার ভাগগুলো — ফোনে উপরে চিপ, কম্পিউটারে সাইডবারে */
 .msecs{margin-bottom:12px}
@@ -934,7 +940,7 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size
     <nav id="sideNav"></nav>
     <div class="sb-foot">
       <div class="sb-user"><div class="uav" id="uAv">A</div><div class="u"><b id="subTitle">—</b><span id="uRole">Admin</span></div></div>
-      <div class="sb-ver">Content Boosting Team (CBT)</div>
+      <div class="sb-ver">Content Boosting Team (CBT)<br>Developed By: <b>Md. Ashraful Islam</b></div>
     </div>
   </aside>
   <header class="top">
@@ -958,6 +964,7 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size
     </div>
   </header>
   <main id="view" class="wrap"></main>
+  <footer class="dev-foot">Developed By: <b>Md. Ashraful Islam</b></footer>
   <nav class="bnav" id="bnav"></nav>
 </div>
 

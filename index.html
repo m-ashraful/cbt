@@ -64,7 +64,9 @@ button:disabled{opacity:.6}
 .b.g{background:var(--goodbg);color:var(--good)}.b.r{background:var(--badbg);color:var(--bad)}.b.w{background:var(--warnbg);color:var(--warn)}
 .note{text-align:center;color:var(--mut);font-size:12px;margin-top:14px}
 h2{font-size:15px;margin-bottom:6px}
+.devf{max-width:480px;margin:18px auto 4px;text-align:center;font-size:11.5px;color:var(--mut)}.devf b{color:var(--ink2)}
 </style></head><body><div class="wrap" id="app"></div>
+<div class="devf">Developed By: <b>Md. Ashraful Islam</b></div>
 <script>
 var BOOT={"id":"","verify":true,"org":"Technique Easy Education","logo":"logo.png","remote":true};
 var $=function(s){return document.querySelector(s)};
@@ -91,7 +93,7 @@ function login(msg){
   '<div class="gorg">'+esc(BOOT.org)+'</div><div class="gapp">'+APP+'</div>'+
   '<label>Member ID</label><input id="mid" placeholder="যেমন M001" autocomplete="username" value="'+esc(S.id||BOOT.id)+'">'+
   (BOOT.verify?'<label>WhatsApp নম্বরের শেষ ৪ সংখ্যা</label><input id="mkey" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="current-password">':'')+
-  '<button id="go">দেখুন</button>'+(msg?'<div class="err">'+esc(msg)+'</div>':'')+'<div class="gfoot">সমস্যা হলে টিম লিডকে জানান (<a href="tel:01303292400" style="color:inherit;text-decoration:none">01303292400</a>)</div></div></div>';
+  '<button id="go">দেখুন</button>'+(msg?'<div class="err">'+esc(msg)+'</div>':'')+'<div class="gfoot">সমস্যা হলে টিম লিডকে জানান (<a href="tel:01303292400" style="color:inherit;text-decoration:none">01303292400</a>)<br>Developed By: <b>Md. Ashraful Islam</b></div></div></div>';
   $("#go").onclick=go;
   [$("#mid"),$("#mkey")].forEach(function(el){if(el)el.addEventListener("keydown",function(e){if(e.key==="Enter")go()})});
 }
