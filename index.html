@@ -66,7 +66,7 @@ button:disabled{opacity:.6}
 h2{font-size:15px;margin-bottom:6px}
 .devf{max-width:480px;margin:18px auto 4px;text-align:center;font-size:11.5px;color:var(--mut)}.devf b{color:var(--ink2)}
 </style></head><body><div class="wrap" id="app"></div>
-<div class="devf">Developed By: <b>Md. Ashraful Islam</b></div>
+<div class="devf"><svg class="dev-mk" viewBox="0 0 100 100" aria-hidden="true" style="width:1.4em;height:1.4em;vertical-align:-.34em;margin-right:5px;display:inline-block"><defs><linearGradient id="devmk-cbtadd1" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset="0" stop-color="#6366f1"/><stop offset=".5" stop-color="#8b5cf6"/><stop offset="1" stop-color="#d946ef"/></linearGradient></defs><path d="M8 18H92M16 88 40 18 64 88M84 18V88" fill="none" stroke="url(#devmk-cbtadd1)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="40" cy="64" r="8" fill="url(#devmk-cbtadd1)"/></svg>Developed By: <b>Md. Ashraful Islam</b></div>
 <script>
 var BOOT={"id":"","verify":true,"org":"Technique Easy Education","logo":"logo.png","remote":true};
 var $=function(s){return document.querySelector(s)};
@@ -93,7 +93,7 @@ function login(msg){
   '<div class="gorg">'+esc(BOOT.org)+'</div><div class="gapp">'+APP+'</div>'+
   '<label>Member ID</label><input id="mid" placeholder="যেমন M001" autocomplete="username" value="'+esc(S.id||BOOT.id)+'">'+
   (BOOT.verify?'<label>WhatsApp নম্বরের শেষ ৪ সংখ্যা</label><input id="mkey" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="current-password">':'')+
-  '<button id="go">দেখুন</button>'+(msg?'<div class="err">'+esc(msg)+'</div>':'')+'<div class="gfoot">সমস্যা হলে টিম লিডকে জানান (<a href="tel:01303292400" style="color:inherit;text-decoration:none">01303292400</a>)<br>Developed By: <b>Md. Ashraful Islam</b></div></div></div>';
+  '<button id="go">দেখুন</button>'+(msg?'<div class="err">'+esc(msg)+'</div>':'')+'<div class="gfoot">সমস্যা হলে টিম লিডকে জানান (<a href="tel:01303292400" style="color:inherit;text-decoration:none">01303292400</a>)<br><svg class="dev-mk" viewBox="0 0 100 100" aria-hidden="true" style="width:1.4em;height:1.4em;vertical-align:-.34em;margin-right:5px;display:inline-block"><defs><linearGradient id="devmk-cbtadd2" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset="0" stop-color="#6366f1"/><stop offset=".5" stop-color="#8b5cf6"/><stop offset="1" stop-color="#d946ef"/></linearGradient></defs><path d="M8 18H92M16 88 40 18 64 88M84 18V88" fill="none" stroke="url(#devmk-cbtadd2)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="40" cy="64" r="8" fill="url(#devmk-cbtadd2)"/></svg>Developed By: <b>Md. Ashraful Islam</b></div></div></div>';
   $("#go").onclick=go;
   [$("#mid"),$("#mkey")].forEach(function(el){if(el)el.addEventListener("keydown",function(e){if(e.key==="Enter")go()})});
 }
