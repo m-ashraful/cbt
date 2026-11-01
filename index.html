@@ -72,9 +72,11 @@ var BOOT={"id":"","verify":true,"org":"Technique Easy Education","logo":"logo.pn
 var $=function(s){return document.querySelector(s)};
 // সার্ভারে কল — GitHub-এ fetch (API_URL), Apps Script লিংকে google.script.run
 function srv(fn,args){
-  if(window.API_URL)return fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args})})
-    .then(function(r){if(!r.ok)throw new Error("সার্ভার সাড়া দিচ্ছে না — একটু পরে আবার চেষ্টা করুন।");return r.json()},function(){throw new Error("সার্ভারে পৌঁছানো যায়নি — ইন্টারনেট দেখুন।")})
-    .then(function(j){if(!j||!j.ok)throw new Error((j&&j.error)||"অজানা সমস্যা।");return j.data});
+  // নেট আটকে গেলে অনুরোধ অনন্তকাল ঝোলে — ২ মিনিটে ছেড়ে দিই
+  if(window.API_URL){var ac=new AbortController(),tm=setTimeout(function(){ac.abort()},120000);
+  return fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:fn,args:args}),signal:ac.signal})
+    .then(function(r){clearTimeout(tm);if(!r.ok)throw new Error("সার্ভার সাড়া দিচ্ছে না — একটু পরে আবার চেষ্টা করুন।");return r.json()},function(e){clearTimeout(tm);throw new Error(e&&e.name==="AbortError"?"সার্ভার ২ মিনিটেও উত্তর দেয়নি — পাতাটা আবার খুলে দেখুন।":"সার্ভারে পৌঁছানো যায়নি — ইন্টারনেট দেখুন।")})
+    .then(function(j){if(!j||!j.ok)throw new Error((j&&j.error)||"অজানা সমস্যা।");return j.data});}
   return new Promise(function(res,rej){var r=google.script.run.withSuccessHandler(res).withFailureHandler(rej);r[fn].apply(r,args)});
 }
 var S={id:"",key:"",month:""};
