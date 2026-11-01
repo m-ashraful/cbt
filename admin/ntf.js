@@ -111,6 +111,9 @@
     ' font-family:"Hind Siliguri",Inter,system-ui,sans-serif;color:var(--ni);font-size:14px;line-height:1.45}',
     '.ntf-root.ntf-dark{--nb:#161a2e;--ni:#e8eaf6;--ni2:#aab1c8;--nm:#6e7497;--nl:#2a3050;--ns:#1d2140;--nbr:#8b93ff;--nu:rgba(139,147,255,.11);--nsh:0 24px 60px -12px rgba(0,0,0,.7)}',
     '.ntf-root *{box-sizing:border-box}',
+    // display:flex hidden-কে হারিয়ে দেয় — বন্ধ জানালা অদৃশ্য থেকেও নিচের বোতামের চাপ খেয়ে ফেলত
+    '.ntf-root [hidden]{display:none!important}',
+    '.ntf-root:not(.ntf-open) .ntf-panel,.ntf-root:not(.ntf-open) .ntf-scrim{pointer-events:none}',
     '.ntf-scrim{position:fixed;inset:0;z-index:2147480000;background:rgba(15,23,42,.42);opacity:0;transition:opacity .18s}',
     '.ntf-root.ntf-open .ntf-scrim{opacity:1}',
     '.ntf-root:not(.ntf-sheet) .ntf-scrim{background:transparent}',
@@ -149,6 +152,8 @@
     '.ntf-it.ntf-x .ntf-b{display:block;-webkit-line-clamp:unset}',
     '.ntf-tm{color:var(--nm);font-size:11.5px;margin-top:4px;display:flex;gap:10px;align-items:center}',
     '.ntf-tm a{color:var(--nbr);font-weight:700;text-decoration:none}',
+    // কোন অ্যাপের (Work Hub-এ সব অ্যাপের বিজ্ঞপ্তি একসাথে আসে — x.a = অ্যাপের নাম, x.ac = রং)
+    '.ntf-ap{font-weight:700;font-size:10.5px;padding:1px 7px;border-radius:99px;color:#fff;background:var(--ac,#4f46e5)}',
     '.ntf-empty{text-align:center;padding:38px 20px 44px;color:var(--nm)}',
     '.ntf-empty div{font-size:38px;margin-bottom:6px}',
     '.ntf-empty b{display:block;color:var(--ni);font-size:15px;margin-bottom:2px}',
@@ -305,7 +310,7 @@
       '<div class="ntf-ic" style="--kc:' + s.col + '">' + esc(s.ic) + '</div>' +
       '<div class="ntf-tx"><div class="ntf-ti">' + esc(s.ti) + '</div>' +
       (x.b ? '<div class="ntf-b">' + esc(x.b) + '</div>' : '') +
-      '<div class="ntf-tm"><span>' + ago(x.t) + '</span>' +
+      '<div class="ntf-tm">' + (x.a ? '<span class="ntf-ap" style="--ac:' + esc(x.ac || '') + '">' + esc(x.a) + '</span>' : '') + '<span>' + ago(x.t) + '</span>' +
       (x.u ? '<a href="' + esc(x.u) + '" target="_blank" rel="noopener" data-n="link">খুলুন ›</a>' : '') + '</div></div></div>';
   }
 
