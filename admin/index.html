@@ -473,6 +473,7 @@ td .nm{font-weight:600} td .id{font-size:12px;color:var(--muted)}
 .msheet.wide{max-width:1060px}
 .rv-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .rv-bar .datebar .inp{width:170px}
+@media (max-width:620px){ .rv-bar .seg{width:100%} .rv-bar .seg button{flex:1;padding:6px 6px;font-size:12.5px} }
 .rv-wrap{background:var(--surface-3);border-radius:14px;padding:14px;overflow-x:auto}
 .rv-paper{background:#fff;color:#1f2937;border-radius:6px;box-shadow:0 4px 18px rgba(15,23,42,.14);padding:24px 26px 18px;
           min-width:660px;max-width:860px;margin:0 auto;font-family:"Times New Roman",Times,"Hind Siliguri",serif;font-size:13.5px;line-height:1.4}
@@ -1885,6 +1886,7 @@ VIEWS.pay = function (force) {
     '<button class="btn good sm" data-act="payAll">✅ সবাইকে paid</button></div>' +
     '<div class="toolbar"><button class="btn primary sm" data-act="agentList">🏪 bKash Agent লিস্ট</button>' +
     '<button class="btn soft sm" data-act="export" data-k="salary">📑 Salary Sheet</button>' +
+    '<button class="btn soft sm" data-act="export" data-k="boss">👔 বসের কপি</button>' +
     '<button class="btn soft sm" data-act="export" data-k="activity">📊 Activity Summary</button>' +
     '<button class="btn sm" data-act="tool" data-k="payslips">📄 সব payslip</button></div>' +
     '<div id="pBody"></div>';
@@ -1973,12 +1975,13 @@ function payModeForm(then) {
 // ── 📑 Salary Sheet / 📊 Activity Summary: মাস বাছলেই রিপোর্টটা এখানেই দেখায় (PDF এর মতো সাজানো),
 //    এরপর দরকার হলে Export → Google Sheet + PDF + Excel। preview আর export একই ডেটা থেকে আসে।
 var RV = { kind: "salary", month: "", seq: 0 };
-var RV_LABEL = { salary: "📑 Salary Sheet", activity: "📊 Activity Summary" };
+var RV_LABEL = { salary: "📑 Salary Sheet", boss: "👔 Salary Sheet (বসের কপি)", activity: "📊 Activity Summary" };
 function exportReport(kind) {
-  RV.kind = kind === "activity" ? "activity" : "salary";
+  RV.kind = RV_LABEL[kind] ? kind : "salary";
   RV.month = S.tab === "pay" && S.pay.month ? S.pay.month : S.boot.month;
   openModal('<span id="rvTitle"></span>',
     '<div class="rv-bar"><div class="seg"><button data-act="rvKind" data-k="salary">📑 Salary Sheet</button>' +
+      '<button data-act="rvKind" data-k="boss" title="bKash ও WhatsApp নম্বর ছাড়া">👔 বসের কপি</button>' +
       '<button data-act="rvKind" data-k="activity">📊 Activity Summary</button></div>' +
       '<div class="datebar" style="margin:0"><button class="nb" data-act="rvMonth" data-n="-1" aria-label="আগের মাস">' + svg("left", 2.4) + '</button>' +
       '<input class="inp" type="month" id="rvMon" max="' + S.boot.month + '">' +
@@ -2254,6 +2257,7 @@ var TOOLS = [
   { k: "dailyReport", ic: "📊", t: "দৈনিক রিপোর্ট এখনই", d: "মেইল + reminder লেখা", c: "আজকের রিপোর্ট এখনই মেইলে যাবে আর যারা জমা দেননি তাদের reminder লেখা হবে।" },
   { k: "monthlyEmail", ic: "📧", t: "গত মাসের বেতন মেইল", d: "admin এর ইমেইলে" },
   { k: "exSalary", ic: "📑", t: "Salary Sheet export", d: "bKash, কাজের দিন, বেতন — PDF", exp: "salary" },
+  { k: "exBoss", ic: "👔", t: "Salary Sheet — বসের কপি", d: "bKash ও WhatsApp নম্বর ছাড়া — PDF", exp: "boss" },
   { k: "exActivity", ic: "📊", t: "Activity Summary", d: "মাসিক কাজের সারাংশ — PDF", exp: "activity" },
   { k: "payslips", ic: "📄", t: "পে-স্লিপ (PDF)", d: "মাস বেছে Drive এ", month: true },
   { k: "payslipsEmail", ic: "📨", t: "পে-স্লিপ + ইমেইল", d: "সব স্লিপ admin কে", month: true },
